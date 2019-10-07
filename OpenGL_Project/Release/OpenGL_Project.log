@@ -1,0 +1,15 @@
+﻿  Poin2D.cpp
+  Triangle2D.cpp
+  car.cpp
+  OpenGL_Project.cpp
+  Renderer.cpp
+  Texture.cpp
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+c:\users\alexandr\source\repos\opengl\opengl_project\src\objects2d\point2d.h(40): warning C4172: returning address of local variable or temporary: m
+  24 of 859 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+    14 functions were new in current compilation
+    24 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\Alexandr\source\repos\OpenGL\Release\vc120.pdb'; linking object as if no debug info
+  OpenGL_Project.vcxproj -> C:\Users\Alexandr\source\repos\OpenGL\Release\OpenGL_Project.exe
