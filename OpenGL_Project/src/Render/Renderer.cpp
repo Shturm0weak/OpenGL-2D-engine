@@ -1,30 +1,25 @@
 #include "Renderer.h"
 #include <iostream>
 
-void Renderer::Render(glm::mat4 proj,double deltatime)
+ void Renderer::Render(glm::mat4 proj)
 {
-	for (unsigned int i = 0; i < objects2d.size(); i++) {
-		objects2d[i].get().OnRunning(proj,*this,deltatime);
-		
-	}
-	OnCollision();
+	 for (unsigned int i = 0; i < objects2d.size(); i++) {
+		 objects2d[i].get().OnRunning(proj);
+	 }
 }
 
-void Renderer::OnRunning(glm::mat4 proj, Renderer& renderer, double deltatime){
+void Renderer::OnRunning(glm::mat4 proj){
 
 }
 
-void Renderer::OnCollision() {
+/*void Renderer::OnCollision() {
 	for (unsigned int i = 0; i < objects2d.size(); i++) {
 		glm::vec2 v1(glm::value_ptr(objects2d[i].get().GetMVP())[12], glm::value_ptr(objects2d[i].get().GetMVP())[13]);
 			if (v1.x > 1. || v1.x < -1.) {		
-				objects2d[i].get().SetAngle(3.14159 - objects2d[i].get().GetAngle());
-				//objects2d[i].get().SetSpeed(0.f);
-				
+				objects2d[i].get().SetAngle(3.14159 - objects2d[i].get().GetAngle());	
 			}
 			else if (v1.y > 1. || v1.y < -1.) {
 				objects2d[i].get().SetAngle(3.14159 - (objects2d[i].get().GetAngle() - 3.14159));
-				//objects2d[i].get().SetSpeed(0.f);
 			}
 		for (unsigned int j = 0; j < objects2d.size(); j++)
 		{
@@ -41,15 +36,15 @@ void Renderer::OnCollision() {
 			}
 		}
 	}
-}
+}*/
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const {
+void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) {
 	shader.Bind(); 
 	va.Bind();
 	ib.Bind();
 	glDrawElements(GL_TRIANGLES,ib.GetCount(), GL_UNSIGNED_INT,nullptr);
 }
 
-void Renderer::Clear() const{
+void Renderer::Clear(){
 	glClear(GL_COLOR_BUFFER_BIT);
 }
