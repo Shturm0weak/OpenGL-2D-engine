@@ -1,4 +1,4 @@
-	static enum Keycode
+enum Keycode
 	{
  	SPACE =  32,
 

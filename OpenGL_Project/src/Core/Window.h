@@ -1,7 +1,4 @@
 #pragma once
-#include "glew.h"
-#include "glfw3.h"
-#include <iostream>
 #include "ConsoleColor.h"
 
 class Window {
@@ -21,9 +18,12 @@ public:
 
 		glfwMakeContextCurrent(m_window);
 
-		if (glewInit() != GLEW_OK)
+		if (glewInit() != GLEW_OK) {
 			std::cout << "error" << std::endl;
-		std::cout << green << "Window initialized!" << std::endl;
+			return -1;
+		}
+		std::cout << green << "Window initialized!" << white << std::endl;
+		return 0;
 	}
 	inline static GLFWwindow* GetWindow() { 
 		

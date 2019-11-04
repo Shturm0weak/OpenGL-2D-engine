@@ -1,9 +1,6 @@
+#include "../pch.h"
 #include "Shader.h"
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <iostream>
-#include "glew.h"
+
 
 Shader::Shader(std::string filepath) : m_FilePath(filepath), m_RendererID(0) {
 	ShaderProgramSource source = Parseshader(filepath);
@@ -29,6 +26,12 @@ void Shader::SetUniform1i(std::string name, int value) {
 
 void Shader::SetUniform4f(std::string name, float v0, float v1, float v2, float v3) {
 	glUniform4f(GetUniformLocation(name),v0,v1,v2,v3);
+}
+
+
+void Shader::SetUniform4fv(std::string name, glm::vec4& vec4) {
+	float color[4] = { vec4[0],vec4[1],vec4[2],vec4[3] };
+	glUniform4fv(GetUniformLocation(name), 1,color);
 }
 
 void Shader::SetUniformMat4f(std::string name, glm::mat4& matrix) {

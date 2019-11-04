@@ -1,0 +1,20 @@
+﻿  WindowsInput.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\core\windowsinput.cpp(13): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  IndexBuffer.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\indexbuffer.cpp(20): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  OpenGL_Project.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\opengl_project.cpp(83): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  Basic2D.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\objects2d\basic2d.cpp(129): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  Renderer.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\renderer.cpp(51): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  Shader.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\shader.cpp(121): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  stb_image.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\stb_image.cpp(3): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  Texture.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\texture.cpp(38): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  VertexBuffer.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\vertexbuffer.cpp(20): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  VertexArray.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\vertexarray.cpp(33): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?

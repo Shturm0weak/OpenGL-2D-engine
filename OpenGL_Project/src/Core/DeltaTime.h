@@ -1,18 +1,19 @@
 #pragma once
-#include "glfw3.h"
-#include <math.h>
 
+#ifndef  DELTATIME_H
+#define DELTATIME_H
 
 
 class DeltaTime 
 {
+private:
+	static float time;
+	static float lasttime;
 public:
-	static double time;
-	static double lasttime;
-	static double deltatime;
+	static float deltatime;
 public:
 	inline static double calculateDeltaTime() {
-		time = glfwGetTime();
+		time = (float)glfwGetTime();
 		deltatime = fabs(lasttime - time);
 		lasttime = time;
 		return deltatime;
@@ -20,6 +21,4 @@ public:
 
 };
 
-  double DeltaTime::time;
-  double DeltaTime::lasttime;
-  double DeltaTime::deltatime;
+#endif // ! DELTATIME_H

@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-#include "glew.h"
  
 struct VertexBufferElement {
 	unsigned int type;
