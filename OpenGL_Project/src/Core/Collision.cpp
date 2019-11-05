@@ -3,7 +3,7 @@
 #include "../Objects2D/Basic2D.h"
 Collision::Collision(double x, double y) {
 	SetType("Collision");
-	Renderer2D::PushCol(*this);
+	Renderer2DLayer::PushCol(*this);
 	position.x = x;
 	position.y = y;
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
@@ -22,7 +22,7 @@ Collision::Collision(double x, double y) {
 }
 Collision::Collision() {
 	SetType("Collision");
-	Renderer2D::PushCol(*this);
+	Renderer2DLayer::PushCol(*this);
 	position.x = 0;
 	position.y = 0;
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
@@ -59,7 +59,7 @@ void Collision::OnRunning(glm::mat4 proj)
 	this->shader->Bind();
 	this->MVP = proj * pos * scaleXview;
 	this->shader->SetUniformMat4f("u_MVP", this->MVP);
-	Renderer2D::Draw(*this->va, *this->ib, *this->shader);
+	Renderer2DLayer::Draw(*this->va, *this->ib, *this->shader);
 }
 void Collision::RealVerPos() {
 	float* pSource;
@@ -141,10 +141,10 @@ bool Collision::IsCollided() {
 							else if (difflr < 0.2 && difflr > -0.2) {
 								Collided_side_left = true;
 							}
-							delete[] arrpos1;
-							arrpos1 = nullptr;
-							col = nullptr;
 						}
+						delete[] arrpos1;
+						arrpos1 = nullptr;
+						col = nullptr;
 					}
 				}
 			}

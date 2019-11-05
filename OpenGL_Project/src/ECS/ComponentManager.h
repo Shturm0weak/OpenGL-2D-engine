@@ -2,23 +2,21 @@
 #ifndef COMPONENTMANAGER_H
 #define COMPONENTMANAGER_H
 
-
 #include "../Render/Renderer2D.h"
 #include "Component.h"
 #include "../Core/Collision.h"
 #include "../Components/Transform.h"
 
-class Basic2D;
+class GameObject;
 
 class ComponentManager {
-	Basic2D* owner = nullptr;
+	GameObject* owner = nullptr;
 	int maxComponents = 32;
 	int currentLength = 0;
 	std::vector <std::reference_wrapper<Component>> components;
 	void pushcomponents(Component& obj) { components.push_back(obj); }
-
 public:
-	ComponentManager(Basic2D* owner) {
+	ComponentManager(GameObject* owner) {
 		this->owner = owner;
 	}
 
@@ -26,14 +24,6 @@ public:
 	T* GetComponent() {
 		return nullptr;
 	}	
-
-	
-
-	template<class T>
-	void AddComponent() {
-		
-	}
-
 
 	template<>
 	Collision* GetComponent() {
@@ -63,6 +53,11 @@ public:
 		return nullptr;
 	}
 
+	template<class T>
+	void AddComponent() {
+
+	}
+
 	template <>
 	void AddComponent<Collision>() {
 		if (currentLength >= maxComponents) {
@@ -85,6 +80,7 @@ public:
 		else {
 			Transform* object = new Transform();
 			object->owner = owner;
+			object->init();
 			currentLength++;
 			object->m_Id = currentLength;
 			pushcomponents(*object);

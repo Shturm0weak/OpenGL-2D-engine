@@ -4,11 +4,11 @@
 #include "../Render/Renderer2D.h"
 #include "../ECS/ComponentManager.h"
 
-class Basic2D : public Renderer2D
+class GameObject : public Renderer2DLayer
 {
 public:
 	enum shaderE { SHADER_TEXTURE, SHADER_COLOR };
-	ComponentManager* ComponentsManager;
+	ComponentManager* component_manager;
 private:
 	shaderE ShaderType = SHADER_COLOR;
 	struct Position {
@@ -18,7 +18,7 @@ private:
 	
 	void InitShader();
 	virtual void OnRunning(glm::mat4 proj) override;
-	virtual Renderer2D* GetCollisionReference() override{ return ComponentsManager->GetComponent<Collision>(); }
+	virtual Renderer2DLayer* GetCollisionReference() override{ return component_manager->GetComponent<Collision>(); }
 
 	const unsigned int indeces[6] = { 0,1,2,3,2,0 };
 	const float positions[16] = {
@@ -34,6 +34,8 @@ protected:
 	glm::mat4 viewXscale = glm::mat4(1.f);
 	glm::mat4 MVP = glm::mat4(1.f);
 	glm::mat4 view = glm::mat4(1.f);
+
+	Position position;
 private:
 
 	GLuint vao;
@@ -44,16 +46,14 @@ private:
 	Texture* texture = nullptr;
 	Shader* shader = nullptr;
 	friend class Transform;
-public:
-	
-	glm::vec4 Color = COLORS::White;
-	using Renderer2D::name;
-	explicit Basic2D(std::string name,float x,float y);
-	explicit Basic2D();
+public:	
+	glm::vec4 color = COLORS::White;
+	using Renderer2DLayer::name;
+	explicit GameObject(std::string name,float x,float y);
+	explicit GameObject();
 	void SetTexture(const std::string& path);
 	void SetColor(vec4 color);
 	void SetShader(int _enum);
-	Position position;
 };
 #endif 
 

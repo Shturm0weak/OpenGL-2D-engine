@@ -1,7 +1,23 @@
-﻿  OpenGL_Project.cpp
+﻿  pch.cpp
+c:\program files (x86)\windows kits\10\include\10.0.17134.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  c:\users\alexandr\source\repos\opengl\includes\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+  Transform.cpp
+  Collision.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\core\collision.cpp(114): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  WindowsInput.cpp
+  Basic2D.cpp
+  IndexBuffer.cpp
+  Renderer.cpp
+  Renderer2D.cpp
+c:\users\alexandr\source\repos\opengl\opengl_project\src\render\renderer2d.cpp(22): warning C4018: '<': signed/unsigned mismatch
+  Shader.cpp
+  Texture.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
+  OpenGL_Project.cpp
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  2 of 2155 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 2158 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

@@ -1,14 +1,14 @@
-class Player : public Basic2D {
+class Player : public GameObject {
 public:
 
 	Collision* collision = nullptr;
 	Transform* transform = nullptr;
 	
-	explicit Player(std::string name,float x,float y) : Basic2D(name,x,y){
-		ComponentsManager->AddComponent<Collision>();
-		collision = ComponentsManager->GetComponent<Collision>();
-		ComponentsManager->AddComponent<Transform>();
-		transform = ComponentsManager->GetComponent<Transform>();
+	explicit Player(std::string name,float x,float y) : GameObject(name,x,y){
+		component_manager->AddComponent<Collision>();
+		collision = component_manager->GetComponent<Collision>();
+		component_manager->AddComponent<Transform>();
+		transform = component_manager->GetComponent<Transform>();
 	}
 
 	void MOVE(float speedx, float speedy) {

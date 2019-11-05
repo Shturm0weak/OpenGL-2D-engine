@@ -10,24 +10,24 @@ enum Layer {
 	LAYER_5 = 5,
 };
 
-class Renderer2D  {
+class Renderer2DLayer  {
 public:
 	virtual void Setlayer(Layer layer);
 protected:
 	std::string name = "";
-	static std::vector <std::reference_wrapper<Renderer2D>> collision2d;
-	static std::vector <std::reference_wrapper<Renderer2D>> objects2d;
+	static std::vector <std::reference_wrapper<Renderer2DLayer>> collision2d;
+	static std::vector <std::reference_wrapper<Renderer2DLayer>> objects2d;
 	static void Draw(const VertexArray& va, const IndexBuffer& ib,const Shader& shader);
 
-	void PushObj(Renderer2D& obj) { objects2d.push_back(obj); }
-	void PushCol(Renderer2D& col) { collision2d.push_back(col); }
+	void PushObj(Renderer2DLayer& obj) { objects2d.push_back(obj); }
+	void PushCol(Renderer2DLayer& col) { collision2d.push_back(col); }
 	virtual void OnRunning(glm::mat4 proj);
 	virtual float* GetVertexPositions() { return nullptr; }
 	virtual double* GetPositions() { return nullptr; }
 	friend class Renderer;
 	friend class Collision;
 	virtual bool IsCollisionEnabled() { return false; }
-	virtual Renderer2D* GetCollisionReference() { return nullptr; }
+	virtual Renderer2DLayer* GetCollisionReference() { return nullptr; }
 	
 };
 #endif

@@ -3,7 +3,7 @@
 #include "../Render/Renderer2D.h"
 #include "../ECS/Component.h"
 
-class Collision : public Renderer2D,public Component {
+class Collision : public Renderer2DLayer,public Component {
 private:
 	const float positions[16] = {
 	-0.5f, -0.5f, 0.0f, 0.0f,
@@ -41,7 +41,7 @@ private:
 	
 	virtual bool IsCollisionEnabled() override { return Enable; }
 	void UpdateCollision(double x, double y, glm::mat4 pos, glm::mat4 view, glm::mat4 scale);
-	virtual Renderer2D* GetCollisionReference() override { return this; }
+	virtual Renderer2DLayer* GetCollisionReference() override { return this; }
 	void RealVerPos();
 	float* GetVertexPositions();
 	double* GetPositions() {
@@ -54,7 +54,7 @@ private:
 		return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 	}
 
-	friend class Basic2D;
+	friend class GameObject;
 	friend class Transform;
 public:
 	

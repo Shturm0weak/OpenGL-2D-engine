@@ -1,10 +1,10 @@
 #include "../pch.h"
 #include "Basic2D.h"
 
-Basic2D::Basic2D(std::string name,float x,float y) {
-	ComponentsManager = new ComponentManager(this);
+GameObject::GameObject(std::string name,float x,float y) {
+	component_manager = new ComponentManager(this);
 	this->name = name;
-	Renderer2D::PushObj(*this);
+	Renderer2DLayer::PushObj(*this);
 	position.x = x;
 	position.y = y;
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
@@ -19,10 +19,10 @@ Basic2D::Basic2D(std::string name,float x,float y) {
 	this->vb->UnBind();
 	this->ib->UnBind();
 }
-Basic2D::Basic2D() {
-	ComponentsManager = new ComponentManager(this);
+GameObject::GameObject() {
+	component_manager = new ComponentManager(this);
 	this->name = "unnamed";
-	Renderer2D::PushObj(*this);
+	Renderer2DLayer::PushObj(*this);
 	position.x = 0;
 	position.y = 0;
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
@@ -39,7 +39,7 @@ Basic2D::Basic2D() {
 
 }
 
-void Basic2D::OnRunning(glm::mat4 proj) {
+void GameObject::OnRunning(glm::mat4 proj) {
 	this->shader->Bind();
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
 	this->viewXscale = scale * view;
@@ -47,19 +47,20 @@ void Basic2D::OnRunning(glm::mat4 proj) {
 	this->shader->SetUniformMat4f("u_MVP", this->MVP);
 	if(ShaderType == SHADER_TEXTURE)
 		this->texture->Bind(this->texture->m_RendererID);
-	Renderer2D::Draw(*this->va, *this->ib, *this->shader);
+	Renderer2DLayer::Draw(*this->va, *this->ib, *this->shader);
 }
 
 
-void Basic2D::SetTexture(const std::string& path) {
+void GameObject::SetTexture(const std::string& path) {
 	if (this->texture != (void*)0xCCCCCCCC || this->texture != nullptr) {
 		delete(texture);
 		texture = nullptr;
 	}
 	texture = new Texture(path);
+	SetShader(GameObject::SHADER_TEXTURE);
 }
 
-void Basic2D::InitShader() {
+void GameObject::InitShader() {
 	if (texture == (void*)0xCCCCCCCC && ShaderType == SHADER_TEXTURE || texture == nullptr && ShaderType == SHADER_TEXTURE) {
 		std::cout << yellow << "InitShader" << " : " << red << "Texture doesn't exist!" << white << std::endl;
 		ShaderType = SHADER_COLOR;
@@ -78,11 +79,11 @@ void Basic2D::InitShader() {
 	else if (ShaderType == SHADER_COLOR) {
 		shader = new Shader("C:/Users/Alexandr/source/repos/OpenGL/OpenGL_Project/src/Shaders/newshader.shader");
 		shader->Bind();
-		shader->SetUniform4fv("U_Color",this->Color);
+		shader->SetUniform4fv("U_Color",this->color);
 	}
 }
 
-void Basic2D::SetShader(int _enum) {
+void GameObject::SetShader(int _enum) {
 	if (_enum == 1) {
 		ShaderType = SHADER_COLOR;
 		if (this->texture != (void*)0xCCCCCCCC && this->texture != nullptr) {
@@ -97,6 +98,7 @@ void Basic2D::SetShader(int _enum) {
 	}
 }
 
-void Basic2D::SetColor(vec4 color) {
-	this->Color = color;
+void GameObject::SetColor(vec4 color) {
+	this->color = color;
+	SetShader(GameObject::SHADER_COLOR);
 }

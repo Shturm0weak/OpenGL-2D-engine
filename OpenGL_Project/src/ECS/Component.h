@@ -1,5 +1,5 @@
 #pragma once
-class Basic2D;
+class GameObject;
 
 class Component {
 private:
@@ -11,6 +11,6 @@ protected:
 	inline int GetComponentId() { return m_Id; }
 	const char* GetComponentType() { return m_Type; }
 public:
-	Basic2D* owner = nullptr;
+	GameObject* owner = nullptr;
 	friend class ComponentManager;
 };
