@@ -31,6 +31,5 @@
 #include "Render/VertexBufferLayout.h"
 #include "Render/VertexArray.h"
 #include "Render/Texture.h"
-#include "Objects2D/Basic2D.h"
+#include "Objects2D/GameObject.h"
 #include <Windows.h>
-

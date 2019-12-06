@@ -1,48 +1,46 @@
-#pragma once
+#ifndef EVENT_H_
+#define EVENT_H_
 
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType(){ return EventType::##type;} \
-								virtual EventType GetEventType() const override { return GetStaticType(); }
-
-
-enum class EventType {
-	None = 0,
-	WindowClosed, CollisionHit, RenderTick, RenderUpdate,
-	MouseEvent, KeyEvent
- };
-
-enum EventCategory {
-	EventCategoryInput = BIT(0),
-	EventCategoryMouse = BIT(1)
-};
-
+class Listener;
 class Event {
-	friend class EventDispatcher;
+private:
+	// Members
+	const char* eventId;
+	void* parameter;
+	
 public:
-	virtual EventType GetEventType()const = 0;
-	virtual int GetCategory() const = 0;
-	virtual int GetCategoryFlags() const = 0;
-
-	bool IsInCategory(EventCategory category) {
-		return GetCategoryFlags() &category;
+	Listener* sender;
+	// Constructor
+	Event(const char* eventId, Listener* sender, void* parameter = 0) {
+		this->eventId = eventId;
+		this->parameter = parameter;
+		this->sender = sender;
 	}
-protected:
-	bool m_Handled = false;
+
+	char* GetNewRefOfEventId() {
+		int size = 0;
+		while (eventId[size] != '\0') {
+			size++;
+		}
+		char* id = new char[size];
+		for (int i = 0; i < size; i++) {
+			id[i] = eventId[i];
+		}
+		id[size] = '\0';
+		return id;
+	}
+
+	// Destructor
+	~Event() {}
+
+	// Accessors
+	inline const char* EventId() const { 
+		if(eventId != nullptr)
+			return eventId;
+		
+	}
+	inline void* Parameter() { return parameter; }
+	inline Listener* Sender() { return sender; }
 };
 
-/*class EventDispatcher {
-public:
-	template<typename T>
-	using EventFn = std::function<bool(T&)>;
-	EventDispatcher(Event& event) : m_Event(event) {}
-
-	template<typename T>
-	bool Dispatch(EventFn<T> func) {
-		if (m_Event.GetEventType() == T::GetStaticType()) {
-			m_Event.m_Handled = func(*(T*)&m_Event);
-			return true;
-		}
-		return false;
-	}
-private:
-	Event& m_Event;
-};*/
+#endif // EVENT_H_

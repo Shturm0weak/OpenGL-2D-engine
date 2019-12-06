@@ -2,22 +2,23 @@
 #ifndef COMPONENTMANAGER_H
 #define COMPONENTMANAGER_H
 
+#include "../Objects2D/GameObject.h"
 #include "../Render/Renderer2D.h"
 #include "Component.h"
-#include "../Core/Collision.h"
+#include "../Components/Collision.h"
 #include "../Components/Transform.h"
-
-class GameObject;
 
 class ComponentManager {
 	GameObject* owner = nullptr;
+	std::string owner_name;
 	int maxComponents = 32;
 	int currentLength = 0;
 	std::vector <std::reference_wrapper<Component>> components;
 	void pushcomponents(Component& obj) { components.push_back(obj); }
 public:
-	ComponentManager(GameObject* owner) {
+	ComponentManager(GameObject* owner, std::string& owner_name) {
 		this->owner = owner;
+		this->owner_name = owner_name;
 	}
 
 	template <class T >
@@ -29,39 +30,35 @@ public:
 	Collision* GetComponent() {
 		for (unsigned int i = 0; i < components.size(); i++)
 		{
-
 			if (components[i].get().GetComponentType() == "Collision") {
 				return (Collision*)components[i].get().GetReference();
 			}
-			else {
-				std::cout << "Error: there is no component of this type" << std::endl;
-				return nullptr;
-			}
 		}
+		std::cout << yellow << "Warning:" << white << " there is no component of type <Collision> for gameobject: " << owner_name << std::endl;
+		return nullptr;
 	}
 
 	template<>
 	Transform* GetComponent() {
 		for (unsigned int i = 0; i < components.size(); i++)
 		{
-
 			if (components[i].get().GetComponentType() == "Transform") {
 				return (Transform*)components[i].get().GetReference();
 			}
 		}
-		std::cout << "Error: there is no component of this type" << std::endl;
+		std::cout << yellow << "Warning:" << white << " there is no component of this type <Transform> for gameobject: " << owner_name << std::endl;
 		return nullptr;
 	}
 
 	template<class T>
-	void AddComponent() {
+	T* AddComponent() {
 
 	}
 
 	template <>
-	void AddComponent<Collision>() {
+	Collision* AddComponent<Collision>() {
 		if (currentLength >= maxComponents) {
-			return;
+			return nullptr;
 		}
 		else {
 			Collision* object = new Collision();
@@ -69,13 +66,14 @@ public:
 			currentLength++;
 			object->m_Id = currentLength;
 			pushcomponents(*object);
+			return object;
 		}
 	}
 
 	template <>
-	void AddComponent<Transform>() {
+	Transform* AddComponent<Transform>() {
 		if (currentLength >= maxComponents) {
-			return;
+			return nullptr;
 		}
 		else {
 			Transform* object = new Transform();
@@ -84,6 +82,7 @@ public:
 			currentLength++;
 			object->m_Id = currentLength;
 			pushcomponents(*object);
+			return object;
 		}
 	}
 };

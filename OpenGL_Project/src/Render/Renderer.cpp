@@ -1,7 +1,7 @@
 #include "../pch.h"
 #include "Renderer.h"
 #include <iostream>
-#include "../Core/Collision.h"
+#include "../Components/Collision.h"
 
 
 void Renderer::Clear() {
@@ -9,6 +9,7 @@ void Renderer::Clear() {
 }
 
 void Renderer::DeleteObject(Renderer2DLayer& obj) {
+	
 	for (unsigned int i = 0; i < Renderer2DLayer::objects2d.size(); i++)
 	{	
 		if (&Renderer2DLayer::objects2d[i].get() == &obj) {
@@ -25,14 +26,19 @@ void Renderer::DeleteObject(Renderer2DLayer& obj) {
 			return;
 		}
 	}
+
+
 }
 
 
 void Renderer::Render(glm::mat4 proj)
 {
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	for (unsigned int i = 0; i < Renderer2DLayer::objects2d.size(); i++) {
+
 		Renderer2DLayer::objects2d[i].get().OnRunning(proj);
-	}
+		
+	}	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if (Collision::IsVisible == true) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		for (unsigned int i = 0; i < Renderer2DLayer::collision2d.size(); i++) {

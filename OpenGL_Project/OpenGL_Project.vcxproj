@@ -166,24 +166,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\Transform.h" />
-    <ClInclude Include="src\Core\Collision.h" />
+    <ClInclude Include="src\Components\Collision.h" />
     <ClInclude Include="src\Core\ColorsRGBA.h" />
     <ClInclude Include="src\Core\ConsoleColor.h" />
     <ClInclude Include="src\Core\Core.h" />
-    <ClInclude Include="src\Core\Event.h" />
     <ClInclude Include="src\Core\DeltaTime.h" />
     <ClInclude Include="src\Core\AllStatics.h" />
+    <ClInclude Include="src\Core\Event.h" />
+    <ClInclude Include="src\Core\EventSystem.h" />
     <ClInclude Include="src\Core\Input.h" />
     <ClInclude Include="src\Core\KeyCode.h" />
     <ClInclude Include="src\Core\KeyEvent.h" />
+    <ClInclude Include="src\Core\Listener.h" />
+    <ClInclude Include="src\Core\ThreadPool.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Core\WindowsInput.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\ECS\ComponentManager.h" />
+    <ClInclude Include="src\ECS\IComponent.h" />
     <ClInclude Include="src\Objects2D\Player.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Render\IndexBuffer.h" />
-    <ClInclude Include="src\Objects2D\Basic2D.h" />
+    <ClInclude Include="src\Objects2D\GameObject.h" />
     <ClInclude Include="src\Render\Renderer.h" />
     <ClInclude Include="src\Render\Renderer2D.h" />
     <ClInclude Include="src\Render\Shader.h" />
@@ -447,12 +451,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Core\Collision.cpp">
+    <ClCompile Include="src\Components\Collision.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Core\EventSystem.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Core\ThreadPool.cpp" />
     <ClCompile Include="src\Core\WindowsInput.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -475,7 +484,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="src\Objects2D\Basic2D.cpp">
+    <ClCompile Include="src\Objects2D\GameObject.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
     </ClCompile>
@@ -496,6 +505,10 @@
     <ClCompile Include="src\Render\stb_image.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="src\Render\Texture.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -529,6 +542,7 @@
     <ClCompile Include="src\vendor\ImGUI\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include\xstring" />
     <None Include="imgui.ini" />
     <None Include="src\Shaders\Basic.shader" />
     <None Include="src\Shaders\newshader.shader" />

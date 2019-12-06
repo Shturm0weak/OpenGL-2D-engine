@@ -19,7 +19,7 @@ void Renderer2DLayer::Setlayer(Layer layer)
 	{
 		if ((std::addressof(Renderer2DLayer::objects2d[i].get()) == std::addressof(*this))) {
 			std::cout << Renderer2DLayer::objects2d[i].get().name << " is set from layer " << i << " to " << layer << std::endl;
-			for (int j = 0; j < size; j++)
+			for (unsigned int j = 0; j < size; j++)
 			{
 				std::iter_swap(Renderer2DLayer::objects2d.begin() + i, Renderer2DLayer::objects2d.end() - layer - j);
 				std::iter_swap(Renderer2DLayer::collision2d.begin() + i, Renderer2DLayer::collision2d.end() - layer - j);

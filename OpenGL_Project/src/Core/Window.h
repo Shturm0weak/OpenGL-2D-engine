@@ -1,6 +1,10 @@
 #pragma once
 #include "ConsoleColor.h"
 
+#include "../vendor/ImGUI/imgui.h"
+#include "../vendor/ImGUI/imgui_impl_glfw.h"
+#include "../vendor/ImGUI/imgui_impl_opengl3.h"
+
 class Window {
 private:
 	static GLFWwindow* m_window;
@@ -9,7 +13,7 @@ public:
 		if (!glfwInit())
 			return -1;
 
-		m_window = glfwCreateWindow(1280, 720, "OpenGL project", NULL, NULL);
+		m_window = glfwCreateWindow(1920, 1080, "OpenGL project", NULL, NULL);
 		if (!m_window)
 		{
 			glfwTerminate();
@@ -23,6 +27,18 @@ public:
 			return -1;
 		}
 		std::cout << green << "Window initialized!" << white << std::endl;
+
+		glfwMakeContextCurrent(Window::GetWindow());
+		glfwSwapInterval(0); // Enable vsync
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGui_ImplGlfw_InitForOpenGL(Window::GetWindow(), true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+
+		ImGui::StyleColorsDark();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		return 0;
 	}
 	inline static GLFWwindow* GetWindow() { 

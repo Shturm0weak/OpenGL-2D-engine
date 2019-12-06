@@ -13,11 +13,12 @@ enum Layer {
 class Renderer2DLayer  {
 public:
 	virtual void Setlayer(Layer layer);
+	static void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
 protected:
 	std::string name = "";
 	static std::vector <std::reference_wrapper<Renderer2DLayer>> collision2d;
 	static std::vector <std::reference_wrapper<Renderer2DLayer>> objects2d;
-	static void Draw(const VertexArray& va, const IndexBuffer& ib,const Shader& shader);
+	
 
 	void PushObj(Renderer2DLayer& obj) { objects2d.push_back(obj); }
 	void PushCol(Renderer2DLayer& col) { collision2d.push_back(col); }
