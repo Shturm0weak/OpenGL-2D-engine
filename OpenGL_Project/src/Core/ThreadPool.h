@@ -8,19 +8,21 @@
 using Task = std::function<void()>;
 class ThreadPool {
 private:
-	
+	static ThreadPool* thread_pool;
 	std::vector<std::thread> m_Threads;
 	std::mutex m_mutex;
 	std::condition_variable m_condition_var;
-	bool m_stopping = false;
 	std::queue <Task> m_Tasks;
-public:
-	static ThreadPool* thread_pool;
 	int num_Threads = 0;
+	void Infinite_loop_function();
+	bool m_stopping = false;
+	static bool initialized;
+public:
+
 	ThreadPool(int n);
 	~ThreadPool();
-	void Infinite_loop_function();
 	void shutdown()noexcept;
-
+	static ThreadPool* Instance() { return thread_pool; }
 	void enqueue(Task task);
+	static void Init();
 };

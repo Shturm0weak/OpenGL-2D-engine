@@ -172,6 +172,7 @@
     <ClInclude Include="src\Core\Core.h" />
     <ClInclude Include="src\Core\DeltaTime.h" />
     <ClInclude Include="src\Core\AllStatics.h" />
+    <ClInclude Include="src\Core\Editor.h" />
     <ClInclude Include="src\Core\Event.h" />
     <ClInclude Include="src\Core\EventSystem.h" />
     <ClInclude Include="src\Core\Input.h" />
@@ -184,10 +185,10 @@
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\ECS\ComponentManager.h" />
     <ClInclude Include="src\ECS\IComponent.h" />
-    <ClInclude Include="src\Objects2D\Player.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Render\IndexBuffer.h" />
     <ClInclude Include="src\Objects2D\GameObject.h" />
+    <ClInclude Include="src\Render\OrthographicCamera.h" />
     <ClInclude Include="src\Render\Renderer.h" />
     <ClInclude Include="src\Render\Renderer2D.h" />
     <ClInclude Include="src\Render\Shader.h" />
@@ -457,6 +458,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Core\Editor.cpp" />
     <ClCompile Include="src\Core\EventSystem.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -488,6 +490,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Render\OrthographicCamera.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
@@ -681,10 +684,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Images\background.jpg" />
+    <Image Include="src\Images\bird.png" />
     <Image Include="src\Images\car.png" />
     <Image Include="src\Images\dirt.jpg" />
     <Image Include="src\Images\one.png" />
     <Image Include="src\Images\reddot.png" />
+    <Image Include="src\Images\tube.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

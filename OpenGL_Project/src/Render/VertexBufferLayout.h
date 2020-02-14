@@ -24,6 +24,8 @@ public:
 	VertexBufferLayout()
 		:m_Stride(0){}
 
+	inline void Clear() { m_Stride = 0; m_Elements.clear(); }
+
 	template<typename T>
 	void Push(unsigned int count) {
 		static_assert(false);

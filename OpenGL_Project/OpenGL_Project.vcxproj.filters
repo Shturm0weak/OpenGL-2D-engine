@@ -798,9 +798,6 @@
     <ClInclude Include="src\Core\AllStatics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects2D\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Render\Renderer2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -862,6 +859,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ThreadPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Render\OrthographicCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -930,6 +933,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ThreadPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Render\OrthographicCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1351,6 +1360,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\Images\background.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Images\bird.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\Images\tube.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -12,14 +12,14 @@ private:
 	virtual void OnRotate() {}
 	virtual void OnStart() {}
 	virtual void OnScale() {}
-	virtual void OnCollision() {}
-
-public:
-	// Constructor
-	Listener() {}
-	// Destructor
+	virtual void OnCollision(void* col) {}
+	
+protected:
 	virtual ~Listener() {}
-	// Handles the event passed to it
+	
+public:
+	Listener() {}
+
 	void HandleEvent(Event* e) {
 		std::string s = e->EventId();
 		if (s == "OnUpdate")
@@ -27,13 +27,13 @@ public:
 		else if (s == "OnStart")
 			OnStart();
 		else if (s == "OnCollision")
-			e->Sender()->OnCollision();
+			e->Sender()->OnCollision(e->Parameter());
 		else if (s == "OnMove")
 			e->Sender()->OnMove();
 		else if (s == "OnRotate")
 			e->Sender()->OnRotate();
 		else if (s == "OnScale")
-			e->Sender()->OnScale();	
+			e->Sender()->OnScale();
 	}
 };
 

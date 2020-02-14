@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INPUT_H
+#define INPUT_H
 
 class Input {
 public:
@@ -8,3 +9,4 @@ protected:
 private:
 	static Input* s_Instance;
 };
+#endif

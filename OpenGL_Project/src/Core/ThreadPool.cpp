@@ -32,7 +32,7 @@ void ThreadPool::Infinite_loop_function()
 						m_Tasks.pop(); 
 						//std::cout << std::this_thread::get_id() << std::endl;
 					}
-					task();
+   					task();
 				}
 		}); 
 	}
@@ -46,6 +46,14 @@ void ThreadPool::shutdown() noexcept
 	m_condition_var.notify_all();
 	for (thread& thread : m_Threads) {
 		thread.detach();
+	}
+}
+
+void ThreadPool::Init()
+{
+	if (initialized == false) {
+		thread_pool = new ThreadPool(thread::hardware_concurrency());
+		initialized = true;
 	}
 }
 

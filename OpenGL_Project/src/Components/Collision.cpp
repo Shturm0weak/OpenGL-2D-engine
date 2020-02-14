@@ -1,14 +1,34 @@
 #include "../pch.h"
 #include "Collision.h"
-#include "../Objects2D/GameObject.h"
+
 
 Collision::Collision(double x, double y) {
 	SetType("Collision");
+	id = Renderer2DLayer::col_id;
+	Renderer2DLayer::col_id++;
 	Renderer2DLayer::PushCol(*this);
-	position.x = x;
-	position.y = y;
+	if (owner != nullptr) {
+		position.x = owner->component_manager->GetComponent<Transform>()->position.x;
+		position.y = owner->component_manager->GetComponent<Transform>()->position.y;
+	}
+	else {
+		position.x = x;
+		position.y = y;
+	}
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
 	RealVerPos();
+	p.push_back(glm::vec2(ScaledVerPos[0] + position.x, ScaledVerPos[1] + position.y));
+	p.push_back(glm::vec2(ScaledVerPos[4] + position.x, ScaledVerPos[5] + position.y));
+	p.push_back(glm::vec2(ScaledVerPos[8] + position.x, ScaledVerPos[9] + position.y));
+	p.push_back(glm::vec2(ScaledVerPos[12] + position.x, ScaledVerPos[13] + position.y));
+	pLocal.push_back(glm::vec2(ScaledVerPos[0], ScaledVerPos[1]));
+	pLocal.push_back(glm::vec2(ScaledVerPos[4], ScaledVerPos[5]));
+	pLocal.push_back(glm::vec2(ScaledVerPos[8], ScaledVerPos[9]));
+	pLocal.push_back(glm::vec2(ScaledVerPos[12], ScaledVerPos[13]));
+	for (unsigned int i = 0; i < p.size(); i++)
+	{
+		pNormals.push_back(NormalVector(p[i]));
+	}
 	glGenVertexArrays(1, &this->vao);
 	glBindVertexArray(this->vao);
 	this->layout->Push<float>(2);
@@ -20,14 +40,38 @@ Collision::Collision(double x, double y) {
 	this->shader->UnBind();
 	this->vb->UnBind();
 	this->ib->UnBind();
+	if (owner != nullptr) {
+		Translate(owner->GetPositions()[0], owner->GetPositions()[1]);
+		SetOffset(offsetX, offsetY);
+	}
 }
 Collision::Collision() {
 	SetType("Collision");
+	id = Renderer2DLayer::col_id;
+	Renderer2DLayer::col_id++;
 	Renderer2DLayer::PushCol(*this);
-	position.x = 0;
-	position.y = 0;
+	if (owner != nullptr) {
+		position.x = owner->component_manager->GetComponent<Transform>()->position.x;
+		position.y = owner->component_manager->GetComponent<Transform>()->position.y;
+	}
+	else {
+		position.x = 0;
+		position.y = 0;
+	}
 	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
 	RealVerPos();
+	p.push_back(glm::vec2(ScaledVerPos[0] + position.x, ScaledVerPos[1] + position.y));
+	p.push_back(glm::vec2(ScaledVerPos[4] + position.x, ScaledVerPos[5] + position.y));
+	p.push_back(glm::vec2(ScaledVerPos[8] + position.x, ScaledVerPos[9] + position.y));
+	p.push_back(glm::vec2(ScaledVerPos[12] + position.x, ScaledVerPos[13] + position.y));
+	pLocal.push_back(glm::vec2(ScaledVerPos[0], ScaledVerPos[1]));
+	pLocal.push_back(glm::vec2(ScaledVerPos[4], ScaledVerPos[5]));
+	pLocal.push_back(glm::vec2(ScaledVerPos[8], ScaledVerPos[9]));
+	pLocal.push_back(glm::vec2(ScaledVerPos[12], ScaledVerPos[13]));
+	for (unsigned int i = 0; i < p.size(); i++)
+	{
+		pNormals.push_back(NormalVector(p[i]));
+	}
 	glGenVertexArrays(1, &this->vao);
 	glBindVertexArray(this->vao);
 	this->layout->Push<float>(2);
@@ -39,6 +83,10 @@ Collision::Collision() {
 	this->shader->UnBind();
 	this->vb->UnBind();
 	this->ib->UnBind();
+	if (owner != nullptr) {
+		Translate(owner->GetPositions()[0], owner->GetPositions()[1]);
+		SetOffset(offsetX, offsetY);
+	}
 }
 
 void Collision::UpdateCollision(double x, double y,glm::mat4 pos,glm::mat4 view,glm::mat4 scale)
@@ -52,14 +100,36 @@ void Collision::UpdateCollision(double x, double y,glm::mat4 pos,glm::mat4 view,
 	this->pos = pos;
 	this->position.x = x + offsetX;
 	this->position.y = y + offsetY;	
+	for (unsigned int i = 0; i < p.size(); i++) {
+		p[i].x = ScaledVerPos[4 * i] + position.x;
+		p[i].y = ScaledVerPos[4 * i + 1] + position.y;
+		pLocal[i].x = ScaledVerPos[4 * i];
+		pLocal[i].y = ScaledVerPos[4 * i + 1];
+		pNormals[i] = (NormalVector(pLocal[i]));
+	}
 }
 
-void Collision::OnRunning(glm::mat4 proj)
+void Collision::OnRunning(OrthographicCamera& camera)
 {
-	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
-	this->shader->Bind();
-	this->MVP = proj * pos * scaleXview;
-	this->shader->SetUniformMat4f("u_MVP", this->MVP);
+	if (!Static) {
+		this->shader->Bind();
+		this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
+		this->scaleXview = scale * view;
+		this->MVP = camera.GetProjectionMatrix() * pos * scaleXview;
+		camera.RecalculateViewMatrix();
+		this->shader->UploadUnifromMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		this->shader->SetUniformMat4f("u_MVP", this->MVP);
+	}
+	else if (Static && !draw_once) {
+		this->shader->Bind();
+		this->pos = translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0));
+		this->scaleXview = scale * view;
+		this->MVP = camera.GetProjectionMatrix() * pos * scaleXview;
+		camera.RecalculateViewMatrix();
+		this->shader->UploadUnifromMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		this->shader->SetUniformMat4f("u_MVP", this->MVP);
+		draw_once = true;
+	}
 	Renderer2DLayer::Draw(*this->va, *this->ib, *this->shader);
 }
 void Collision::RealVerPos() {
@@ -80,6 +150,16 @@ float* Collision::GetVertexPositions() {
 	return ScaledVerPos;
 }
 
+glm::vec2 Collision::NormalVector(glm::vec2 vec2)
+{
+	return glm::vec2(1,1 * (vec2.x * 1) / vec2.y);
+}
+
+float Collision::AngleToRotate(glm::vec2 v1, glm::vec2 v2)
+{
+	return (glm::acos((v1.x * v1.y + v2.x * v2.y)/(sqrt(v1.x * v1.x + v2.x * v2.x) * sqrt(v1.y * v1.y + v2.y * v2.y)))) * 57.3;
+}
+
 void Collision::Scale(float x,float y) {
 	if (this == nullptr) 
 		return;
@@ -88,14 +168,20 @@ void Collision::Scale(float x,float y) {
 	UpdateCollision(position.x, position.y, pos, view, this->scale);
 }
 
+void Collision::Translate(float x, float y)
+{
+	position.x = x;
+	position.y = y;
+	this->pos = translate(glm::mat4(1.f), glm::vec3(position.x + offsetX, position.y+ offsetY, 0));
+	UpdateCollision(position.x, position.y, pos, view, this->scale);
+}
+
 void Collision::SetOffset(float x, float y) {
 	offsetX = x;
 	offsetY = y;
-	position.x += offsetX;
-	position.y += offsetY;
 }
 
-bool Collision::IsCollided() {
+/*bool Collision::IsCollided() {
 	std::unique_lock<std::mutex> lock(mtx);
 	_isCollided = false;
 	if (this == nullptr) {
@@ -150,6 +236,7 @@ bool Collision::IsCollided() {
 							else if (difflr < 0.3 && difflr > -0.3) {
 								Collided_side_left = true;
 							}
+							_collidedObj = col;
 						}
 						delete[] arrpos1;
 						arrpos1 = nullptr;
@@ -167,5 +254,131 @@ bool Collision::IsCollided() {
 	}
 	else {
 		return false;
+	}
+}*/
+
+bool Collision::IsCollidedSAT() {
+	_isCollided = false;
+	int check = 0;
+	if (this == nullptr) {
+		return false;
+	}
+	if (Enable == true) {
+		for (unsigned int i = 0; i < collision2d.size(); i++)
+		{
+			if (collision2d[i].get().IsCollisionEnabled() == true) {
+				col = dynamic_cast<Collision*>(collision2d[i].get().GetCollisionReference());
+				if (this != col) {
+					if (col == nullptr) {
+						return false;
+					}
+
+					for (unsigned int a = 0; a < p.size(); a++)
+					{
+						int b = (a + 1) % p.size();
+						glm::vec2 axisProj = { -(p[b].x - p[a].x), p[b].y - p[a].y };
+						float d = sqrtf(axisProj.x * axisProj.x + axisProj.y * axisProj.y);
+						axisProj = { axisProj.y / d, axisProj.x / d };
+
+						float min_r1 = INFINITY, max_r1 = -INFINITY;
+
+						for (unsigned int p = 0; p < this->p.size(); p++)
+						{
+							float q = (this->p[p].x * axisProj.x + this->p[p].y * axisProj.y);
+							min_r1 = std::fmin(min_r1, q);
+							max_r1 = std::fmax(max_r1, q);
+						}
+
+						float min_r2 = INFINITY, max_r2 = -INFINITY;
+						for (unsigned int p = 0; p < col->p.size(); p++)
+						{
+							float q = (col->p[p].x * axisProj.x + col->p[p].y * axisProj.y);
+							min_r2 = std::fmin(min_r2, q);
+							max_r2 = std::fmax(max_r2, q);
+						}
+
+						if (!(max_r2 >= min_r1 && max_r1 >= min_r2)) {
+							check++;	
+							_collidedObj = nullptr;
+						}
+
+					}
+					if (check > 0) {
+						check = 0;
+						continue;
+					}
+					_collidedObj = col;
+					return true;
+					
+				}
+			}
+			
+		}
+
+	}
+}
+
+void Collision::IsCollidedDIAGS()
+{
+	_isCollided = false;
+	_collidedObj = nullptr;
+	if (this == nullptr) {
+		return;
+	}
+	if (Enable == true) {
+
+		for (unsigned int i = 0; i < collision2d.size(); i++)
+		{
+			if (collision2d[i].get().IsCollisionEnabled() == true) {
+				col = dynamic_cast<Collision*>(collision2d[i].get().GetCollisionReference());
+				if (this != col) {
+					if (col == nullptr) {
+						return;
+					}
+					
+					for (unsigned int p = 0; p < this->p.size(); p++)
+					{
+						glm::vec2 line_r1s = { this->position.x, this->position.y };
+						glm::vec2 line_r1e = this->p[p];
+						displacement.x = 0;
+						displacement.y = 0;
+						// ...against edges of the other
+						for (unsigned int q = 0; q < col->p.size(); q++)
+						{
+							glm::vec2 line_r2s = col->p[q];
+							glm::vec2 line_r2e = col->p[(q + 1) % col->p.size()];
+
+							// Standard "off the shelf" line segment intersection
+							float h = (line_r2e.x - line_r2s.x) * (line_r1s.y - line_r1e.y) - (line_r1s.x - line_r1e.x) * (line_r2e.y - line_r2s.y);
+							float t1 = ((line_r2s.y - line_r2e.y) * (line_r1s.x - line_r2s.x) + (line_r2e.x - line_r2s.x) * (line_r1s.y - line_r2s.y)) / h;
+							float t2 = ((line_r1s.y - line_r1e.y) * (line_r1s.x - line_r2s.x) + (line_r1e.x - line_r1s.x) * (line_r1s.y - line_r2s.y)) / h;
+
+							if (t1 >= 0.0f && t1 < 1.0f && t2 >= 0.0f && t2 < 1.0f)
+							{
+								displacement.x += (1.f - t1) * (line_r1e.x - line_r1s.x);
+								displacement.y += (1.f - t1) * (line_r1e.y - line_r1s.y);
+								_collidedObj = col;
+								_isCollided = true;
+								EventSystem::Instance()->SendEvent("OnCollision", this->owner, _collidedObj);
+								//double angle = AngleToRotate(col->pNormals[q], this->pNormals[p]);
+								//std::cout << angle << "	" << owner->name << " Col " << col->pNormals[q].x << " : " << col->pNormals[q].y << " Obj " << this->pNormals[p].x << " : " << this->pNormals[p].y << std::endl;
+								//std::cout << angle << std::endl;
+								//owner->component_manager->GetComponent<Transform>()->Rotate(angle,glm::vec3(0,0,1));
+							}
+						}
+						if (col->IsTrigger == false) {
+							trans = owner->component_manager->GetComponent<Transform>();
+							trans->position.x -= displacement.x;
+							trans->position.y -= displacement.y;
+							trans = nullptr;
+						}
+						
+					}
+				}
+				//_isCollided = false;
+			}
+		}
+		//_collidedObj = nullptr;
+		return;
 	}
 }

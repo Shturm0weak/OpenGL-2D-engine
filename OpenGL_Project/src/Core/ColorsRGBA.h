@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COLORS_H
+#define COLORS_H
 
 #include "../vendor/glm/glm.hpp"
 
@@ -13,4 +14,4 @@ struct COLORS {
 	static vec4 White;
 	static vec4 Orange;
 };
-
+#endif

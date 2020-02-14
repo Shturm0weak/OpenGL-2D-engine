@@ -1,13 +1,14 @@
 #shader vertex
 #version 330 core
 
+
 layout(location = 0) in vec4 positions;
 
-
+uniform mat4 u_ViewProjection;
 uniform mat4 u_MVP;
 
 void main() {
-	gl_Position = u_MVP * positions;
+	gl_Position = u_ViewProjection * u_MVP * positions ;
 };
 
 #shader fragment

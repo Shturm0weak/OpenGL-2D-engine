@@ -4,10 +4,14 @@
 #include "../vendor/ImGUI/imgui.h"
 #include "../vendor/ImGUI/imgui_impl_glfw.h"
 #include "../vendor/ImGUI/imgui_impl_opengl3.h"
+#include "../Render/OrthographicCamera.h"
 
 class Window {
 private:
+	Window() {}
 	static GLFWwindow* m_window;
+	static OrthographicCamera m_camera;
+
 public:
 	static int Init() {
 		if (!glfwInit())
@@ -29,7 +33,7 @@ public:
 		std::cout << green << "Window initialized!" << white << std::endl;
 
 		glfwMakeContextCurrent(Window::GetWindow());
-		glfwSwapInterval(0); // Enable vsync
+		glfwSwapInterval(1); // Enable vsync
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		ImGui_ImplGlfw_InitForOpenGL(Window::GetWindow(), true);
@@ -41,9 +45,8 @@ public:
 
 		return 0;
 	}
-	inline static GLFWwindow* GetWindow() { 
-		
-		return m_window; }
+	inline static GLFWwindow* GetWindow() { return m_window; }
+	inline static OrthographicCamera& GetCamera() { return m_camera; }
 };
 
 

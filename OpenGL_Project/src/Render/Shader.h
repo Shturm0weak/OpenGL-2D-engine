@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADER_H
+#define SHADER_H
 
 struct ShaderProgramSource {
 	std::string VertexSource;
@@ -25,4 +26,6 @@ public:
 	void SetUniform4f(std::string name, float v0, float v1, float v2, float fv3);
 	void SetUniform4fv(std::string name, glm::vec4& vec4);
 	void SetUniformMat4f(std::string name, glm::mat4& matrix);
+	void UploadUnifromMat4(const std::string& name, const glm::mat4& matrix);
 };
+#endif

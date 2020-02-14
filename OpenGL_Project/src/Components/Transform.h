@@ -1,25 +1,27 @@
-#pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 #include "../ECS/Component.h"
 
 class Transform : public Component {
 private:
 
-
 	Collision* col = nullptr;
 	struct Position {
-		double x = 0;
-		double y = 0;
-		double z = 0;
+		float x = 0;
+		float y = 0;
+		float z = 0;
 	};
 	void init();
 	friend class ComponentManager;
 
 public:
-
-	Position position;
 	Transform();
+	Position position;
+	float angle = 0;
 	void Move(float speedY, float speedX,float speedZ);
 	void Rotate(float angle, glm::vec3 axis);
 	void Scale(float scaleX,float scaleY);
 	void Translate(float x,float y);
+	void RotateOnce(float angle, glm::vec3 axis);
 };
+#endif

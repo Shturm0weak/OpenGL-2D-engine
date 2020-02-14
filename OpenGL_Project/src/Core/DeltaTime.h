@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef  DELTATIME_H
 #define DELTATIME_H
 

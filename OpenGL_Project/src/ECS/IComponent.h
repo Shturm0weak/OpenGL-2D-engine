@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ICOMPONENT_H
+#define ICOMPONENT_H
 
 class IComponent {
 protected:
@@ -6,3 +7,4 @@ protected:
 	virtual int GetComponentId() = 0;
 	virtual const char* GetComponentType() = 0;
 };
+#endif

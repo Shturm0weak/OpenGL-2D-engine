@@ -7,7 +7,7 @@ private:
 	int m_width, m_height, m_BPP;
 public:
 	unsigned int m_RendererID;
-	Texture(const std::string& path);
+	Texture(const std::string& path,int flip = 1);
 	~Texture();
 
 	void Bind(unsigned int slot = 0) const;

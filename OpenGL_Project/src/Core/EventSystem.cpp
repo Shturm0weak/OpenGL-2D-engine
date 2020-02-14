@@ -57,6 +57,7 @@ void EventSystem::RegisterClient(const char* event, Listener* client) {
 	// If the client is null, or already registered
 	if (!client || AlreadyRegistered(event, client)) {
 		// Quit now
+
 		return;
 	}
 
@@ -107,57 +108,38 @@ void EventSystem::UnregisterAll(Listener* client) {
 
 void EventSystem::SendEvent(const char* eventId, Listener* sender, void* data)
 {
-	std::unique_lock<std::mutex> lock(mtx1);
-	if(process_events == false)
-	{	
-		
-		std::unique_ptr<Event> newEvent(new Event(eventId, sender, data));
-		currentEvents.push_back(*newEvent);
-		//std::cout << "add event in main " << eventId << std::endl;
-		cond.notify_one();
-	}
-	else {
-		std::unique_ptr<Event> newEvent(new Event(eventId, sender, data));
-		tempEvents.push_back(*newEvent);
-		//std::cout << "add event in temp " << eventId << std::endl;
-		cond.notify_one();
-	}
-	lock.unlock();
+
+	std::unique_ptr<Event> newEvent(new Event(eventId, sender, data));
+	//std::lock_guard<std::mutex> lck(mtx);
+	currentEvents.push(*newEvent);
+	//cond.notify_one();
+	//std::cout << currentEvents.size() << std::endl;
 }
 
 // Process all events
 void EventSystem::ProcessEvents() {
-	std::unique_lock<std::mutex> lock(mtx);
-	//std::cout << currentEvents.size() + tempEvents.size() << std::endl;
-	cond.wait(lock);
-	
-	process_events = true;
-	//std::cout << currentEvents.size() << std::endl;
+	//std::unique_lock<std::mutex> lck(mtx);
+	//cond.wait(lck);
 	while (currentEvents.size() > 0) {
-		DispatchEvent(&currentEvents.front());
+		Event newEvent = currentEvents.front();
+		currentEvents.pop();
+		DispatchEvent(&newEvent);
 		//std::cout << currentEvents.front().EventId() << std::endl;
-		currentEvents.pop_front();
-		
 	}
-	//std::cout << currentEvents.size() << std::endl;
-	process_events = false;
-
-	while (tempEvents.size() > 0) {
-		DispatchEvent(&tempEvents.front());
-		//std::cout << currentEvents.front().EventId() << std::endl;
-		tempEvents.pop_front();
-	}
-	lock.unlock();
+	//lck.unlock();
 }
 
 // Clear events
 void EventSystem::ClearEvents() {
 	// Clear the events
-	currentEvents.clear();
+	
+	while (currentEvents.size() > 0) {
+		currentEvents.pop();
+	}
 }
 
 // Shutdown event system
 void EventSystem::Shutdown() {
 	database.clear();
-	currentEvents.clear();
+	ClearEvents();
 }

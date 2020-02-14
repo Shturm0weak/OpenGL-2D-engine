@@ -1,7 +1,8 @@
 #include "../pch.h"
 #include "Renderer2D.h"
 
-void Renderer2DLayer::OnRunning(glm::mat4 proj){
+
+void Renderer2DLayer::OnRunning(OrthographicCamera& camera){
 
 }
 
@@ -12,21 +13,18 @@ void Renderer2DLayer::Draw(const VertexArray& va, const IndexBuffer& ib, const S
 	glDrawElements(GL_TRIANGLES,ib.GetCount(), GL_UNSIGNED_INT,nullptr);
 }
 
-void Renderer2DLayer::Setlayer(Layer layer)
+void Renderer2DLayer::Setlayer(int layer)
 {
 	unsigned int size = Renderer2DLayer::objects2d.size();
-	for (unsigned int i = 0; i < size; i++)
+	std::cout << *name << " is set from layer " << this->GetId() << " to " << layer << std::endl;
+	Renderer2DLayer* tmp = this;
+	Renderer2DLayer::objects2d.erase(objects2d.begin() + this->GetId());
+	Renderer2DLayer::objects2d.insert(objects2d.begin() + layer,*tmp);
+	for (unsigned int i = 0; i < objects2d.size(); i++)
 	{
-		if ((std::addressof(Renderer2DLayer::objects2d[i].get()) == std::addressof(*this))) {
-			std::cout << Renderer2DLayer::objects2d[i].get().name << " is set from layer " << i << " to " << layer << std::endl;
-			for (unsigned int j = 0; j < size; j++)
-			{
-				std::iter_swap(Renderer2DLayer::objects2d.begin() + i, Renderer2DLayer::objects2d.end() - layer - j);
-				std::iter_swap(Renderer2DLayer::collision2d.begin() + i, Renderer2DLayer::collision2d.end() - layer - j);
-			}
-			return;
-		}
+		objects2d[i].get().SetId(i);
+		objects2d[i].get().GetLayer() = i;
 	}
-	
+	return;
 }
 

@@ -2,11 +2,11 @@
 #include "Texture.h"
 #include "stb_image.h"
 
-Texture::Texture(const std::string& path)
+Texture::Texture(const std::string& path,int flip)
 	:m_RendererID(0), m_FilePath(path), m_LocalBuffer(nullptr),
 	m_height(0), m_width(0), m_BPP(0)
 {
-	stbi_set_flip_vertically_on_load(1);
+	stbi_set_flip_vertically_on_load(flip);
 	m_LocalBuffer = stbi_load(path.c_str(), &m_width, &m_height, &m_BPP,4);
 
 	glGenTextures(1, &m_RendererID);

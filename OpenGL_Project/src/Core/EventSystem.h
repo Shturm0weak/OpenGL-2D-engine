@@ -11,10 +11,10 @@ using std::pair;
 #include "Listener.h"
 #include <iostream>
 #include "ThreadPool.h"
-#include <string>
 
 class EventSystem {
 private:
+	
 	// Database of Clients & their events
 	multimap<const char*, Listener*> database;
 
@@ -23,7 +23,7 @@ private:
 
 	multimap<const char*, Listener*>::iterator iter;
 	// List of events to be processed
-	std::list<Event> currentEvents;
+	std::queue<Event> currentEvents;
 	std::list<Event> tempEvents;
 	mutable std::mutex mtx,mtx1;
 	std::condition_variable cond;
